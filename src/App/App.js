@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 
-import {Container, Header, DivCalc, Label, Input, Button, P1, P2, DivTable, Table, Row, Column, Error} from './style/style';
+import {Container, Header, ContainerCalc,DivCalc, Label, Input, Button, P1, P2, DivTable, Table, Row, Column, Error} from './style/style';
 import GlobalStyle from './style/global';
 
 function CalculatorImc () {
@@ -43,18 +43,25 @@ function CalculatorImc () {
       setErrors('Os dados não podem ser iguais ou menores que zero');
     } else if (value <= 17) {
       setTable('Muito abaixo do peso');
+      setErrors('');
     } else if (value <= 18.5) {
       setTable('Abaixo do peso');
+      setErrors('');
     } else if (value <= 24.99) {
       setTable('Peso normal');
+      setErrors('');
     } else if (value <= 29.99) {
       setTable('Acima do peso');
+      setErrors('');
     } else if (value <= 34.99) {
       setTable('Obesidade I');
+      setErrors('');
     } else if (value <= 39.99) {
       setTable('Obesidade II');
+      setErrors('');
     } else if (value >= 40) {
       setTable('Obesidade III');
+      setErrors('');
     }
   }
 }
@@ -70,12 +77,12 @@ useEffect(() => {
 })
 
   return (
-    <>
+    <Container>
       <GlobalStyle/>
       <Header>
         <h1>Calculadora de Índice de Massa Corporal</h1>
       </Header>
-    <Container>
+    <ContainerCalc>
     <DivCalc>
       <Label>Peso</Label>
       <Input type='number' onChange={e => setWeight(e.target.value)} alt='Peso' placeholder='Ex: 70'/>
@@ -126,8 +133,8 @@ useEffect(() => {
           </Row>
         </Table>
       </DivTable>
-    </Container>
-  </>
+    </ContainerCalc>
+  </Container>
   )
 }
 

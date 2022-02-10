@@ -8,6 +8,11 @@ export default createGlobalStyle`
     font-family: 'Sora', sans-serif;
     text-decoration: none;
     appearance: none;
+    width: 100%;
 
+    @media (max-width: 450px) {
+      margin: 0;
+      padding: 0;
+    }
   }
 `
