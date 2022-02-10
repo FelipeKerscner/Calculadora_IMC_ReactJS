@@ -1,12 +1,14 @@
 import React, {useState, useEffect} from 'react';
 
-import {Container, Title, DivTable, Table, Row, Column, DivCalc, Label, Input, Button, P1, P2} from './style/style'
+import {Container, Header, DivCalc, Label, Input, Button, P1, P2, DivTable, Table, Row, Column, Error} from './style/style';
+import GlobalStyle from './style/global';
 
 function CalculatorImc () {
   const [weight, setWeight] = useState('');
   const [height, setHeight] = useState('');
   const [value, setValue] = useState('');
   const [table, setTable] = useState('');
+  const [errors, setErrors] = useState([]);
 
   function calculate() {
 
@@ -33,10 +35,12 @@ function CalculatorImc () {
 
   } else {
     let value = parseFloat(weight / (((height) / 100).toFixed(2) * ((height) / 100).toFixed(2))).toFixed(2);
-    setValue(value)
+    setValue(value);
 
     if (height <= 0 || weight <= 0) {
-      setTable('Os dados não podem ser iguais ou menores que zero');
+      setValue('');
+      setTable('');
+      setErrors('Os dados não podem ser iguais ou menores que zero');
     } else if (value <= 17) {
       setTable('Muito abaixo do peso');
     } else if (value <= 18.5) {
@@ -53,13 +57,38 @@ function CalculatorImc () {
       setTable('Obesidade III');
     }
   }
-    
+}
+useEffect(() => {
+  function clickResult(e) {
+    let {key} = e;
+    if (key === 'Enter') [
+      calculate(e)
+    ]
   }
+  document.addEventListener('keydown', clickResult);
+  return () => document.removeEventListener('keydown', clickResult);
+})
 
   return (
+    <>
+      <GlobalStyle/>
+      <Header>
+        <h1>Calculadora de Índice de Massa Corporal</h1>
+      </Header>
     <Container>
-      <Title>Calculadora de Índice de Massa Corporal</Title>
+    <DivCalc>
+      <Label>Peso</Label>
+      <Input type='number' onChange={e => setWeight(e.target.value)} alt='Peso' placeholder='Ex: 70'/>
 
+      <Label>Altura</Label>
+      <Input type='number' onChange={e => setHeight(e.target.value)} alt='Altura' placeholder='Ex: 1,70'/>  
+
+      <Button onClick={calculate} >Calcular</Button>
+
+        <P1>Resultado: {value}</P1>
+        <P2>Avaliação: {table}</P2>
+      </DivCalc>
+      <Error>{errors}</Error>
       <DivTable>
         <Table>
           <Row>
@@ -97,21 +126,8 @@ function CalculatorImc () {
           </Row>
         </Table>
       </DivTable>
-
-
-    <DivCalc>
-      <Label>Peso</Label>
-      <Input type='number' onChange={e => setWeight(e.target.value)} alt='Peso' placeholder='Ex: 70'/>
-
-      <Label>Altura</Label>
-      <Input type='number' onChange={e => setHeight(e.target.value)} alt='Altura' placeholder='Ex: 1,70'/>  
-
-      <Button onClick={calculate}>Calcular</Button>
-
-        <P1>Resultado: {value}</P1>
-        <P2>Avaliação: {table}</P2>
-      </DivCalc>
     </Container>
+  </>
   )
 }
 
